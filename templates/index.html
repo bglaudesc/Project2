@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Title</title>
+    <title>Airport Delays</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,10 +15,16 @@
 
 
 <body class="bg-secondary">
-    <H1>Airport Delays</H1>
-    <div class="mycontainer bg-light">
+    <div class="text-center bg-light">
+        <h1>Airport Delays</h1>
+    </div>
+    <div id="loading" class="mycontainer text-center">
+        <img src="{{url_for('static', filename='images/loading.gif')}}" alt="loading">
+    </div>
+    <div id="content" class="mycontainer bg-light hide">
         <div class="row">
             <div class="col-md-12">
+                <h4>Choose an Airport</h4>
 
                 <select name="airports" id="airports"></select>
                 <!-- <select name="airports" id="airports" onchange="onchange(this.value)"></select> -->
@@ -29,6 +35,7 @@
                 <div id="pie"></div>
             </div>
             <div class="col-md-7">
+                <h4>Choose a Category</h4>
                 <select name="Weather" id="Weather"></select>
                 <div id="Top10"></div>
             </div>

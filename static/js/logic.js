@@ -21,6 +21,8 @@ $.ajax({
             }
         });
         // console.log(jsondata);
+        $("#loading").addClass("hide")
+        $("#content").removeClass("hide")
         airport_dropdown(airports)
         weather_dropdown()
     })
@@ -85,7 +87,7 @@ function barchart(airport) {
         }
     })
 
-    var layout = { barmode: 'stack' };
+    var layout = { barmode: 'stack' , title:"Number of Events" };
 
     Plotly.newPlot('bar', data, layout);
 }
@@ -216,7 +218,7 @@ function Top10(Weather) {
     };
     var data = [trace1];
     var layout = {
-        title: 'Weather Conditions',
+        title: 'Top 10 Weather Conditions',
         barmode: 'stack'
     };
     Plotly.newPlot('Top10', data, layout);

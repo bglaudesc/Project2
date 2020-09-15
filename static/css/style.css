@@ -5,3 +5,13 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+body{
+    background-image: url("../images/airport.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+.hide{
+    display: none;
+}
