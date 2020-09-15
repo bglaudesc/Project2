@@ -36,5 +36,18 @@ def get_all():
     
     return jsonify(myList)
 
+
+@app.route("/Top10")
+def get_Top10l():
+    # Return all of data from the mongo database
+    data = db.WeatherTop10.find({})
+    myList = []
+    for row in data:
+        del row ["_id"]
+        myList.append(row)
+
+    
+    return jsonify(myList)
+
 if __name__ == "__main__":
     app.run(debug=True)
