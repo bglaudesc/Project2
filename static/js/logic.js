@@ -87,7 +87,7 @@ function barchart(airport) {
         }
     })
 
-    var layout = { barmode: 'stack' , title:"Number of Events" };
+    var layout = { barmode: 'stack', title: "Number of Events" };
 
     Plotly.newPlot('bar', data, layout);
 }
@@ -161,7 +161,7 @@ function piechart(airport) {
         ],
         // height: 400,
         // width: 600,
-        showlegend: false,
+        showlegend: true,
         grid: { rows: 1, columns: 2 }
     };
 
@@ -171,7 +171,7 @@ function piechart(airport) {
 function weather_dropdown() {
     const selector = d3.select("#Weather");
     const conditions = [
-        "Cold", "Fog", "Hail", "Precipitation", "Rain", "Snow", "Storm" , "Total Weather",
+        "Cold", "Fog", "Hail", "Precipitation", "Rain", "Snow", "Storm", "Total Weather",
     ]
     conditions.sort().map(Weather => {
         selector
@@ -187,22 +187,24 @@ function on_weather_change(event) {
 }
 
 function Top10(Weather) {
-    const weather_data = Top10_data.map(row =>{
-        return{
+    const weather_data = Top10_data.map(row => {
+        return {
             airport: row.Airport,
-            weather: row[Weather]
+            weather: row[Weather],
+            Lat: row.Lat,
+            Lng: row.Lng
         }
     });
     const compare = (a, b) => b.weather - a.weather;
     weather_data.sort(compare)
-    console.log(weather_data)
+    console.log(Top10_data)
 
 
     // var xValue = ['Product A', 'Product B', 'Product C'];
     // var yValue = [20, 14, 23];
     var trace1 = {
-        x: weather_data.slice(0, 10).map(x=> x.airport),
-        y: weather_data.slice(0, 10).map(x=> x.weather),
+        x: weather_data.slice(0, 10).map(x => x.airport),
+        y: weather_data.slice(0, 10).map(x => x.weather),
         type: 'bar',
         // text: yValue.map(String),
         // textposition: 'auto',
@@ -223,8 +225,99 @@ function Top10(Weather) {
     };
     Plotly.newPlot('Top10', data, layout);
 
-
+    loadmap(weather_data)
 };
+
+function loadmap(rows) {
+    function unpack(rows, key) {
+        return rows.map(function (row) { return row[key]; });
+    }
+    var min = Infinity;
+    var max = -Infinity;
+    var cityPop = rows.map(row => {
+        if (row.weather < min) {
+            min = row.weather;
+        }
+        else if (row.weather > max) {
+            max = row.weather;
+        }
+        return row.weather
+    })
+    var cityName = unpack(rows, 'airport'),
+        // cityPop = unpack(rows, 'weather'),
+        cityLat = unpack(rows, 'Lat'),
+        cityLon = unpack(rows, 'Lng'),
+        color = [, "rgb(255,65,54)", "rgb(133,20,75)", "rgb(255,133,27)", "lightgrey"],
+        citySize = [],
+        hoverText = [];
+    // scale = 1000;
+    function scale(val) {
+        if (val >= 1000) {
+            return 75
+        } else if (val >= 500) {
+            return 25
+        }
+        else if (val >= 100) {
+            return 10
+        } else { return 5 }
+    }
+    for (var i = 0; i < cityPop.length; i++) {
+        // var currentSize = cityPop[i] / scale;
+        var currentSize = scale(cityPop[i])
+        var currentText = cityName[i] + " Total: " + cityPop[i];
+        citySize.push(currentSize);
+        hoverText.push(currentText);
+    }
+    console.log(cityLat)
+    console.log(cityLon)
+
+    var data = [{
+        type: 'scattergeo',
+        locationmode: 'USA-states',
+        lat: cityLat,
+        lon: cityLon,
+        hoverinfo: 'text',
+        text: hoverText,
+
+        marker: {
+            size: citySize,
+            color: cityPop,
+            cmin: min*.8,
+            cmax: max*1.1,
+            colorscale: "Jet",
+            colorbar: {
+                title: "Number of Events",
+                // y: 1,
+                // yanchor: "top", 
+                // len: 0.45
+            },
+            line: {
+                color: 'black',
+                width: 2
+            },
+        }
+    }];
+
+    var layout = {
+        title: '2017 Weather Conditions',
+        showlegend: false,
+        height: 600,
+        geo: {
+            scope: 'usa',
+            projection: {
+                type: 'albers usa'
+            },
+            showland: true,
+            landcolor: 'rgb(217, 217, 217)',
+            subunitwidth: 1,
+            countrywidth: 1,
+            subunitcolor: 'rgb(255,255,255)',
+            countrycolor: 'rgb(255,255,255)'
+        },
+    };
+
+    Plotly.newPlot("map", data, layout, { showLink: false });
+}
 
 
 
