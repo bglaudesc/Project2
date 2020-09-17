@@ -40,4 +40,3 @@ https://www.transtats.bts.gov/OT_Delay/ot_delaycause1.asp?pn=1&periodfrom=24245&
 ![](sketch_readme/proj2_sketch2.png)
 
 
-![](sketch_readme/proj2_sketch3.png)
