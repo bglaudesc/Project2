@@ -197,7 +197,7 @@ function Top10(Weather) {
     });
     const compare = (a, b) => b.weather - a.weather;
     weather_data.sort(compare)
-    console.log(Top10_data)
+    console.log(weather_data)
 
 
     // var xValue = ['Product A', 'Product B', 'Product C'];
@@ -225,10 +225,10 @@ function Top10(Weather) {
     };
     Plotly.newPlot('Top10', data, layout);
 
-    loadmap(weather_data)
+    loadmap(weather_data, Weather)
 };
 
-function loadmap(rows) {
+function loadmap(rows, Weather) {
     function unpack(rows, key) {
         return rows.map(function (row) { return row[key]; });
     }
@@ -286,7 +286,7 @@ function loadmap(rows) {
             cmax: max*1.1,
             colorscale: "Jet",
             colorbar: {
-                title: "Number of Events",
+                title: `Number of ${Weather} Events`,
                 // y: 1,
                 // yanchor: "top", 
                 // len: 0.45
@@ -301,7 +301,7 @@ function loadmap(rows) {
     var layout = {
         title: '2017 Weather Conditions',
         showlegend: false,
-        height: 600,
+        height: 500,
         geo: {
             scope: 'usa',
             projection: {
